@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pestea — Vehicle Check</title>
+<style>
+  :root {
+    --green: #1a5c2a;
+    --green-light: #2d7a3e;
+    --green-pale: #e8f4ea;
+    --amber: #e07b00;
+    --red: #c0392b;
+    --grey-dark: #1f1f1f;
+    --grey-mid: #555;
+    --grey-light: #e0e0e0;
+    --grey-bg: #f5f5f5;
+    --white: #ffffff;
+    --radius: 10px;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    background: var(--grey-bg);
+    color: var(--grey-dark);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--green);
+    color: var(--white);
+    padding: 18px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  }
+
+  header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+
+  header p {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 2px;
+  }
+
+  .week-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    margin-top: 4px;
+  }
+
+  main {
+    padding: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .section {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--green);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--green-pale);
+  }
+
+  .field {
+    margin-bottom: 16px;
+  }
+
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--grey-dark);
+    margin-bottom: 6px;
+  }
+
+  label .req { color: var(--red); margin-left: 2px; }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  input[type="time"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--grey-light);
+    border-radius: 8px;
+    font-size: 16px; /* 16px prevents iOS zoom */
+    font-family: var(--font);
+    background: var(--white);
+    color: var(--grey-dark);
+    transition: border-color 0.15s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(26,92,42,0.12);
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23555' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+  }
+
+  textarea { resize: none; min-height: 80px; }
+
+  /* Radio / checkbox groups */
+  .check-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .check-item {
+    position: relative;
+  }
+
+  .check-item input[type="radio"],
+  .check-item input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .check-item label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 8px;
+    border: 1.5px solid var(--grey-light);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+    min-height: 44px;
+    margin-bottom: 0;
+  }
+
+  .check-item input:checked + label {
+    border-color: var(--green);
+    background: var(--green-pale);
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  .check-item.bad input:checked + label {
+    border-color: var(--red);
+    background: #fdecea;
+    color: var(--red);
+  }
+
+  .check-item.warn input:checked + label {
+    border-color: var(--amber);
+    background: #fff4e0;
+    color: var(--amber);
+  }
+
+  /* Checklist rows */
+  .checklist-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--grey-light);
+    gap: 12px;
+  }
+
+  .checklist-row:last-child { border-bottom: none; }
+
+  .checklist-label {
+    font-size: 15px;
+    flex: 1;
+  }
+
+  .toggle-group {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .toggle-group input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 36px;
+    border: 1.5px solid var(--grey-light);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--grey-mid);
+  }
+
+  .toggle-group input[type="radio"].ok-radio:checked + .toggle-btn {
+    background: var(--green-pale);
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .toggle-group input[type="radio"].fail-radio:checked + .toggle-btn {
+    background: #fdecea;
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  /* Fuel slider */
+  .fuel-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .fuel-row input[type="range"] {
+    flex: 1;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    accent-color: var(--green);
+    height: 4px;
+  }
+
+  .fuel-label {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--green);
+    min-width: 40px;
+    text-align: right;
+  }
+
+  /* Submit */
+  .submit-btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background: var(--green);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius);
+    font-size: 17px;
+    font-weight: 700;
+    font-family: var(--font);
+    cursor: pointer;
+    transition: background 0.15s;
+    letter-spacing: 0.2px;
+    margin-bottom: 32px;
+  }
+
+  .submit-btn:active { background: var(--green-light); }
+  .submit-btn:disabled { background: var(--grey-mid); cursor: not-allowed; }
+
+  /* Success state */
+  #success {
+    display: none;
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 40px 24px;
+    text-align: center;
+    margin: 24px 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  #success .tick {
+    width: 64px;
+    height: 64px;
+    background: var(--green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 32px;
+  }
+
+  #success h2 { font-size: 22px; color: var(--green); margin-bottom: 8px; }
+  #success p { color: var(--grey-mid); font-size: 15px; line-height: 1.5; }
+
+  .new-check-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 28px;
+    background: var(--green-pale);
+    color: var(--green);
+    border: 2px solid var(--green);
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--font);
+  }
+
+  /* Hint text */
+  .hint { font-size: 12px; color: var(--grey-mid); margin-top: 4px; }
+
+  /* Error messages */
+  .error-msg {
+    font-size: 12px;
+    color: var(--red);
+    margin-top: 4px;
+    display: none;
+  }
+
+  .field.invalid input,
+  .field.invalid select,
+  .field.invalid textarea {
+    border-color: var(--red);
+  }
+
+  .field.invalid .error-msg { display: block; }
+
+  /* Loading overlay */
+  #loading {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+    font-size: 16px;
+    gap: 12px;
+  }
+
+  #loading.active { display: flex; }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🚗 Pestea Vehicle Check</h1>
+  <p>Weekly inspection — Monday</p>
+  <span class="week-badge" id="weekBadge">Loading...</span>
+</header>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <span>Submitting...</span>
+</div>
+
+<div id="success">
+  <div class="tick">✓</div>
+  <h2>Submitted</h2>
+  <p>Your vehicle check has been recorded. The office team will review it shortly.</p>
+  <button class="new-check-btn" onclick="resetForm()">New Check</button>
+</div>
+
+<main id="mainForm">
+
+  <!-- DRIVER & VEHICLE -->
+  <div class="section">
+    <div class="section-title">Driver &amp; Vehicle</div>
+
+    <div class="field" id="field-driver">
+      <label>Driver Name <span class="req">*</span></label>
+      <input type="text" id="driver" placeholder="Your full name" autocomplete="name" inputmode="text">
+      <span class="error-msg">Required</span>
+    </div>
+
+    <div class="field" id="field-reg">
+      <label>Vehicle Registration <span class="req">*</span></label>
+      <input type="text" id="reg" placeholder="e.g. S12345" style="text-transform:uppercase" autocomplete="off" inputmode="text">
+      <span class="error-msg">Required</span>
+    </div>
+
+    <div class="field" id="field-date">
+      <label>Date <span class="req">*</span></label>
+      <input type="date" id="checkDate">
+      <span class="error-msg">Required</span>
+    </div>
+
+    <div class="field" id="field-time">
+      <label>Time of Check <span class="req">*</span></label>
+      <input type="time" id="checkTime">
+      <span class="error-msg">Required</span>
+    </div>
+
+    <div class="field" id="field-odometer">
+      <label>Odometer Reading (km) <span class="req">*</span></label>
+      <input type="number" id="odometer" placeholder="e.g. 45230" inputmode="numeric" min="0">
+      <span class="error-msg">Required — enter current mileage</span>
+    </div>
+
+    <div class="field">
+      <label>Fuel Level</label>
+      <div class="fuel-row">
+        <span style="font-size:13px;color:var(--grey-mid)">Empty</span>
+        <input type="range" id="fuelLevel" min="0" max="100" step="10" value="50" oninput="updateFuelLabel(this.value)">
+        <span style="font-size:13px;color:var(--grey-mid)">Full</span>
+      </div>
+      <div style="display:flex;justify-content:center;margin-top:4px">
+        <span class="fuel-label" id="fuelLabel">50%</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PRE-TRIP CHECKLIST -->
+  <div class="section">
+    <div class="section-title">Pre-Trip Inspection</div>
+    <p class="hint" style="margin-bottom:16px">Mark OK or FAIL for each item.</p>
+
+    <div id="checklistItems"></div>
+  </div>
+
+  <!-- VEHICLE CONDITION -->
+  <div class="section">
+    <div class="section-title">Vehicle Condition</div>
+
+    <div class="field" id="field-bodywork">
+      <label>Bodywork Damage? <span class="req">*</span></label>
+      <div class="check-group">
+        <div class="check-item">
+          <input type="radio" name="bodywork" id="bodywork-none" value="None">
+          <label for="bodywork-none">✓ None</label>
+        </div>
+        <div class="check-item warn">
+          <input type="radio" name="bodywork" id="bodywork-minor" value="Minor">
+          <label for="bodywork-minor">Minor</label>
+        </div>
+        <div class="check-item bad">
+          <input type="radio" name="bodywork" id="bodywork-significant" value="Significant">
+          <label for="bodywork-significant">Significant</label>
+        </div>
+        <div class="check-item bad">
+          <input type="radio" name="bodywork" id="bodywork-new" value="New damage">
+          <label for="bodywork-new">New damage</label>
+        </div>
+      </div>
+      <span class="error-msg">Select one</span>
+    </div>
+
+    <div class="field" id="field-cleanliness">
+      <label>Cleanliness (interior &amp; exterior) <span class="req">*</span></label>
+      <div class="check-group">
+        <div class="check-item">
+          <input type="radio" name="clean" id="clean-good" value="Good">
+          <label for="clean-good">✓ Good</label>
+        </div>
+        <div class="check-item warn">
+          <input type="radio" name="clean" id="clean-acceptable" value="Acceptable">
+          <label for="clean-acceptable">Acceptable</label>
+        </div>
+        <div class="check-item bad">
+          <input type="radio" name="clean" id="clean-poor" value="Poor — needs cleaning">
+          <label for="clean-poor">Poor</label>
+        </div>
+        <div class="check-item bad">
+          <input type="radio" name="clean" id="clean-contaminated" value="Contaminated">
+          <label for="clean-contaminated">Contaminated</label>
+        </div>
+      </div>
+      <span class="error-msg">Select one</span>
+    </div>
+
+  </div>
+
+  <!-- EQUIPMENT -->
+  <div class="section">
+    <div class="section-title">Pestea Equipment On Board</div>
+    <p class="hint" style="margin-bottom:16px">Tick all items present and in working order.</p>
+    <div id="equipmentItems"></div>
+  </div>
+
+  <!-- DEFECTS & NOTES -->
+  <div class="section">
+    <div class="section-title">Defects &amp; Notes</div>
+
+    <div class="field">
+      <label>Defects or Issues Noted</label>
+      <textarea id="defects" placeholder="Describe any defects, warning lights, unusual sounds, or concerns. Leave blank if none."></textarea>
+    </div>
+
+    <div class="field" id="field-action">
+      <label>Immediate action required? <span class="req">*</span></label>
+      <div class="check-group">
+        <div class="check-item">
+          <input type="radio" name="action" id="action-no" value="No">
+          <label for="action-no">✓ No</label>
+        </div>
+        <div class="check-item bad">
+          <input type="radio" name="action" id="action-yes" value="Yes — see defects">
+          <label for="action-yes">Yes — urgent</label>
+        </div>
+      </div>
+      <span class="error-msg">Select one</span>
+    </div>
+
+    <div class="field">
+      <label>Driver declaration</label>
+      <p style="font-size:13px;color:var(--grey-mid);line-height:1.5;margin-bottom:12px">
+        By submitting, I confirm this inspection reflects the actual condition of the vehicle at the time of check, to the best of my knowledge.
+      </p>
+      <div class="check-item" style="display:inline-block">
+        <input type="checkbox" id="declaration" name="declaration">
+        <label for="declaration" style="justify-content:flex-start;padding:10px 16px;font-weight:600">
+          ✓ I confirm
+        </label>
+      </div>
+      <span class="error-msg" id="decl-error" style="display:none;color:var(--red);font-size:12px;display:block;margin-top:4px"></span>
+    </div>
+  </div>
+
+  <button class="submit-btn" id="submitBtn" onclick="submitForm()">Submit Vehicle Check</button>
+
+</main>
+
+<script>
+  // ─── CONFIG ────────────────────────────────────────────────────────────────
+  // Replace this URL with your Google Apps Script Web App URL after deployment
+  const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+
+  // ─── CHECKLIST ITEMS ───────────────────────────────────────────────────────
+  const checklistItems = [
+    { id: 'tyres',      label: 'Tyres (pressure &amp; condition)' },
+    { id: 'lights',     label: 'Lights (front, rear, indicators)' },
+    { id: 'brakes',     label: 'Brakes (feel &amp; response)' },
+    { id: 'wipers',     label: 'Windscreen wipers' },
+    { id: 'mirrors',    label: 'Mirrors (adjusted &amp; intact)' },
+    { id: 'seatbelts',  label: 'Seat belts' },
+    { id: 'horn',       label: 'Horn' },
+    { id: 'fluid',      label: 'Engine oil &amp; coolant (no warning lights)' },
+    { id: 'firstaid',   label: 'First aid kit present' },
+    { id: 'extinguisher', label: 'Fire extinguisher (in date)' },
+  ];
+
+  const equipmentItems = [
+    { id: 'sprayer',    label: 'Sprayer / ULV fogger' },
+    { id: 'chemicals',  label: 'Chemical stock &amp; COSHH sheets' },
+    { id: 'ppe',        label: 'PPE (gloves, mask, overalls)' },
+    { id: 'toolkit',    label: 'Tool kit' },
+    { id: 'spill',      label: 'Spill kit' },
+    { id: 'signage',    label: 'Treatment signage &amp; stickers' },
+  ];
+
+  // ─── BUILD CHECKLIST ───────────────────────────────────────────────────────
+  function buildChecklist(items, containerId) {
+    const container = document.getElementById(containerId);
+    items.forEach(item => {
+      container.innerHTML += `
+        <div class="checklist-row">
+          <span class="checklist-label">${item.label}</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="${item.id}" id="${item.id}-ok" value="OK">
+            <label class="toggle-btn" for="${item.id}-ok">OK</label>
+            <input type="radio" class="fail-radio" name="${item.id}" id="${item.id}-fail" value="FAIL">
+            <label class="toggle-btn" for="${item.id}-fail">FAIL</label>
+          </div>
+        </div>`;
+    });
+  }
+
+  buildChecklist(checklistItems, 'checklistItems');
+  buildChecklist(equipmentItems, 'equipmentItems');
+
+  // ─── DATE / TIME / WEEK ────────────────────────────────────────────────────
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function setDefaults() {
+    const now = new Date();
+    document.getElementById('checkDate').value = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+    document.getElementById('checkTime').value = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+    // Week number
+    const d = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    document.getElementById('weekBadge').textContent = `Week ${weekNo} — ${now.toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'})}`;
+  }
+
+  setDefaults();
+
+  // ─── FUEL LABEL ────────────────────────────────────────────────────────────
+  function updateFuelLabel(val) {
+    document.getElementById('fuelLabel').textContent = val + '%';
+  }
+
+  // ─── VALIDATION ────────────────────────────────────────────────────────────
+  function validateRequired(fieldId, inputId) {
+    const val = document.getElementById(inputId).value.trim();
+    const field = document.getElementById('field-' + fieldId);
+    if (!val) { field.classList.add('invalid'); return false; }
+    field.classList.remove('invalid');
+    return true;
+  }
+
+  function validateRadio(name, fieldId) {
+    const checked = document.querySelector(`input[name="${name}"]:checked`);
+    const field = document.getElementById('field-' + fieldId);
+    if (!checked) { field.classList.add('invalid'); return false; }
+    field.classList.remove('invalid');
+    return true;
+  }
+
+  // ─── COLLECT DATA ──────────────────────────────────────────────────────────
+  function collectData() {
+    const data = {
+      timestamp: new Date().toISOString(),
+      driver: document.getElementById('driver').value.trim(),
+      registration: document.getElementById('reg').value.trim().toUpperCase(),
+      date: document.getElementById('checkDate').value,
+      time: document.getElementById('checkTime').value,
+      odometer: document.getElementById('odometer').value,
+      fuelLevel: document.getElementById('fuelLevel').value + '%',
+      bodywork: document.querySelector('input[name="bodywork"]:checked')?.value || '',
+      cleanliness: document.querySelector('input[name="clean"]:checked')?.value || '',
+      immediateAction: document.querySelector('input[name="action"]:checked')?.value || '',
+      defects: document.getElementById('defects').value.trim(),
+    };
+
+    checklistItems.forEach(item => {
+      data['check_' + item.id] = document.querySelector(`input[name="${item.id}"]:checked`)?.value || 'Not checked';
+    });
+
+    equipmentItems.forEach(item => {
+      data['equip_' + item.id] = document.querySelector(`input[name="${item.id}"]:checked`)?.value || 'Not checked';
+    });
+
+    return data;
+  }
+
+  // ─── SUBMIT ────────────────────────────────────────────────────────────────
+  async function submitForm() {
+    // Validate
+    let valid = true;
+    valid = validateRequired('driver', 'driver') && valid;
+    valid = validateRequired('reg', 'reg') && valid;
+    valid = validateRequired('date', 'checkDate') && valid;
+    valid = validateRequired('time', 'checkTime') && valid;
+    valid = validateRequired('odometer', 'odometer') && valid;
+    valid = validateRadio('bodywork', 'bodywork') && valid;
+    valid = validateRadio('clean', 'cleanliness') && valid;
+    valid = validateRadio('action', 'action') && valid;
+
+    const decl = document.getElementById('declaration');
+    const declErr = document.getElementById('decl-error');
+    if (!decl.checked) {
+      declErr.textContent = 'You must confirm the declaration before submitting.';
+      declErr.style.display = 'block';
+      valid = false;
+    } else {
+      declErr.style.display = 'none';
+    }
+
+    if (!valid) {
+      document.querySelector('.field.invalid')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    if (APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE') {
+      alert('⚠️ Setup not complete: paste your Google Apps Script URL into the APPS_SCRIPT_URL variable in this file.');
+      return;
+    }
+
+    const data = collectData();
+    const loading = document.getElementById('loading');
+    loading.classList.add('active');
+    document.getElementById('submitBtn').disabled = true;
+
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      // no-cors means we can't read the response — assume success if no error thrown
+      loading.classList.remove('active');
+      document.getElementById('mainForm').style.display = 'none';
+      document.getElementById('success').style.display = 'block';
+      window.scrollTo(0, 0);
+    } catch (err) {
+      loading.classList.remove('active');
+      document.getElementById('submitBtn').disabled = false;
+      alert('Submission failed — check your internet connection and try again.\n\nError: ' + err.message);
+    }
+  }
+
+  // ─── RESET ─────────────────────────────────────────────────────────────────
+  function resetForm() {
+    document.getElementById('mainForm').querySelectorAll('input, select, textarea').forEach(el => {
+      if (el.type === 'radio' || el.type === 'checkbox') el.checked = false;
+      else el.value = '';
+    });
+    document.getElementById('fuelLevel').value = 50;
+    document.getElementById('fuelLabel').textContent = '50%';
+    document.getElementById('defects').value = '';
+    document.getElementById('submitBtn').disabled = false;
+    setDefaults();
+    document.getElementById('mainForm').style.display = 'block';
+    document.getElementById('success').style.display = 'none';
+    window.scrollTo(0, 0);
+  }
+</script>
+</body>
+</html>
