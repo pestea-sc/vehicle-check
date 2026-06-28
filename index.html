@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0152)file:///C:/Users/GustavPavlu/AppData/Local/Temp/6a999d4a-eb7d-4308-b292-2832bc0f98a7_Vehicle%20Check%20Sheet%20-%20Final.zip.8a7/vehicle-check-form.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Pestea — Vehicle Check</title>
 <style>
@@ -39,17 +39,8 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.25);
   }
 
-  header h1 {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-  }
-
-  header p {
-    font-size: 12px;
-    opacity: 0.8;
-    margin-top: 2px;
-  }
+  header h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.3px; }
+  header p { font-size: 12px; opacity: 0.8; margin-top: 2px; }
 
   .week-badge {
     display: inline-block;
@@ -60,11 +51,7 @@
     margin-top: 4px;
   }
 
-  main {
-    padding: 16px;
-    max-width: 600px;
-    margin: 0 auto;
-  }
+  main { padding: 16px; max-width: 600px; margin: 0 auto; }
 
   .section {
     background: var(--white);
@@ -85,10 +72,7 @@
     border-bottom: 2px solid var(--green-pale);
   }
 
-  .field {
-    margin-bottom: 16px;
-  }
-
+  .field { margin-bottom: 16px; }
   .field:last-child { margin-bottom: 0; }
 
   label {
@@ -111,7 +95,7 @@
     padding: 12px 14px;
     border: 1.5px solid var(--grey-light);
     border-radius: 8px;
-    font-size: 16px; /* 16px prevents iOS zoom */
+    font-size: 16px;
     font-family: var(--font);
     background: var(--white);
     color: var(--grey-dark);
@@ -135,6 +119,44 @@
 
   textarea { resize: none; min-height: 80px; }
 
+  /* New vehicle panel */
+  .new-vehicle-panel {
+    display: none;
+    background: var(--green-pale);
+    border: 1.5px solid var(--green);
+    border-radius: 8px;
+    padding: 14px;
+    margin-top: 10px;
+  }
+
+  .new-vehicle-panel.visible { display: block; }
+
+  .new-vehicle-panel label {
+    font-size: 13px;
+    color: var(--green);
+    margin-bottom: 4px;
+  }
+
+  .new-vehicle-panel input {
+    margin-bottom: 10px;
+    font-size: 15px;
+  }
+
+  .add-vehicle-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: var(--font);
+    cursor: pointer;
+    margin-top: 4px;
+  }
+
   /* Radio / checkbox groups */
   .check-group {
     display: grid;
@@ -142,9 +164,7 @@
     gap: 8px;
   }
 
-  .check-item {
-    position: relative;
-  }
+  .check-item { position: relative; }
 
   .check-item input[type="radio"],
   .check-item input[type="checkbox"] {
@@ -200,11 +220,7 @@
   }
 
   .checklist-row:last-child { border-bottom: none; }
-
-  .checklist-label {
-    font-size: 15px;
-    flex: 1;
-  }
+  .checklist-label { font-size: 15px; flex: 1; }
 
   .toggle-group {
     display: flex;
@@ -247,11 +263,7 @@
   }
 
   /* Fuel slider */
-  .fuel-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+  .fuel-row { display: flex; align-items: center; gap: 12px; }
 
   .fuel-row input[type="range"] {
     flex: 1;
@@ -291,7 +303,7 @@
   .submit-btn:active { background: var(--green-light); }
   .submit-btn:disabled { background: var(--grey-mid); cursor: not-allowed; }
 
-  /* Success state */
+  /* Success */
   #success {
     display: none;
     background: var(--white);
@@ -303,8 +315,7 @@
   }
 
   #success .tick {
-    width: 64px;
-    height: 64px;
+    width: 64px; height: 64px;
     background: var(--green);
     border-radius: 50%;
     display: flex;
@@ -331,10 +342,8 @@
     font-family: var(--font);
   }
 
-  /* Hint text */
   .hint { font-size: 12px; color: var(--grey-mid); margin-top: 4px; }
 
-  /* Error messages */
   .error-msg {
     font-size: 12px;
     color: var(--red);
@@ -344,13 +353,10 @@
 
   .field.invalid input,
   .field.invalid select,
-  .field.invalid textarea {
-    border-color: var(--red);
-  }
+  .field.invalid textarea { border-color: var(--red); }
 
   .field.invalid .error-msg { display: block; }
 
-  /* Loading overlay */
   #loading {
     display: none;
     position: fixed;
@@ -368,8 +374,7 @@
   #loading.active { display: flex; }
 
   .spinner {
-    width: 40px;
-    height: 40px;
+    width: 40px; height: 40px;
     border: 4px solid rgba(255,255,255,0.3);
     border-top-color: white;
     border-radius: 50%;
@@ -384,7 +389,7 @@
 <header>
   <h1>🚗 Pestea Vehicle Check</h1>
   <p>Weekly inspection — Monday</p>
-  <span class="week-badge" id="weekBadge">Loading...</span>
+  <span class="week-badge" id="weekBadge">Week 26 — 27 June 2026</span>
 </header>
 
 <div id="loading">
@@ -405,15 +410,43 @@
   <div class="section">
     <div class="section-title">Driver &amp; Vehicle</div>
 
-    <div class="field" id="field-driver">
-      <label>Driver Name <span class="req">*</span></label>
-      <input type="text" id="driver" placeholder="Your full name" autocomplete="name" inputmode="text">
-      <span class="error-msg">Required</span>
+    <div class="field" id="field-vehicle">
+      <label>Select Vehicle <span class="req">*</span></label>
+      <select id="vehicleSelect" onchange="onVehicleSelect(this.value)">
+        <option value="">— Choose registration —</option>
+        <option value="S24575">S24575 — Ralph Morgan</option>
+        <option value="S44080">S44080 — Nicolas Mussard</option>
+        <option value="S29212">S29212 — Vilma Vel</option>
+        <option value="S38994">S38994 — Manuel Louis-Marie</option>
+        <option value="S47423">S47423 — Alex Kisenga</option>
+        <option value="S47208">S47208 — Terence Padayachy</option>
+        <option value="S47201">S47201 — Peter Leba</option>
+        <option value="S47207">S47207 — Mark Briones</option>
+        <option value="S47202">S47202 — Bernie Cadungog</option>
+        <option value="S43621">S43621 — Glenn Aura</option>
+        <option value="S30688">S30688 — Andrew Valmont</option>
+        <option value="S35490">S35490 — Raphael Killindo</option>
+        <option value="S37542">S37542 — Geordley Dugasse</option>
+        <option value="__NEW__">+ Add a new vehicle</option>
+      </select>
+      <span class="error-msg">Select a vehicle</span>
     </div>
 
-    <div class="field" id="field-reg">
-      <label>Vehicle Registration <span class="req">*</span></label>
-      <input type="text" id="reg" placeholder="e.g. S12345" style="text-transform:uppercase" autocomplete="off" inputmode="text">
+    <!-- New vehicle entry panel -->
+    <div class="new-vehicle-panel" id="newVehiclePanel">
+      <label>Registration Number</label>
+      <input type="text" id="newReg" placeholder="e.g. S48000" style="text-transform:uppercase">
+      <label>Assigned Driver</label>
+      <input type="text" id="newDriver" placeholder="Full name">
+      <label>Make &amp; Model</label>
+      <input type="text" id="newModel" placeholder="e.g. Toyota HiLux">
+      <button class="add-vehicle-btn" onclick="confirmNewVehicle()">✓ Use this vehicle for this check</button>
+      <p class="hint" style="margin-top:8px">This vehicle will be flagged in the report for the office to add to the master list.</p>
+    </div>
+
+    <div class="field" id="field-driver" style="display:none">
+      <label>Confirm Driver Name <span class="req">*</span></label>
+      <input type="text" id="driver" placeholder="Your full name" autocomplete="name">
       <span class="error-msg">Required</span>
     </div>
 
@@ -453,8 +486,97 @@
   <div class="section">
     <div class="section-title">Pre-Trip Inspection</div>
     <p class="hint" style="margin-bottom:16px">Mark OK or FAIL for each item.</p>
-
-    <div id="checklistItems"></div>
+    <div id="checklistItems">
+        <div class="checklist-row">
+          <span class="checklist-label">Tyres (pressure &amp; condition)</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="tyres" id="tyres-ok" value="OK">
+            <label class="toggle-btn" for="tyres-ok">OK</label>
+            <input type="radio" class="fail-radio" name="tyres" id="tyres-fail" value="FAIL">
+            <label class="toggle-btn" for="tyres-fail">FAIL</label>
+          </div>
+        </div>
+        <div class="checklist-row">
+          <span class="checklist-label">Lights (front, rear, indicators)</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="lights" id="lights-ok" value="OK">
+            <label class="toggle-btn" for="lights-ok">OK</label>
+            <input type="radio" class="fail-radio" name="lights" id="lights-fail" value="FAIL">
+            <label class="toggle-btn" for="lights-fail">FAIL</label>
+          </div>
+        </div>
+        <div class="checklist-row">
+          <span class="checklist-label">Brakes (feel &amp; response)</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="brakes" id="brakes-ok" value="OK">
+            <label class="toggle-btn" for="brakes-ok">OK</label>
+            <input type="radio" class="fail-radio" name="brakes" id="brakes-fail" value="FAIL">
+            <label class="toggle-btn" for="brakes-fail">FAIL</label>
+          </div>
+        </div>
+        <div class="checklist-row">
+          <span class="checklist-label">Windscreen wipers</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="wipers" id="wipers-ok" value="OK">
+            <label class="toggle-btn" for="wipers-ok">OK</label>
+            <input type="radio" class="fail-radio" name="wipers" id="wipers-fail" value="FAIL">
+            <label class="toggle-btn" for="wipers-fail">FAIL</label>
+          </div>
+        </div>
+        <div class="checklist-row">
+          <span class="checklist-label">Mirrors (adjusted &amp; intact)</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="mirrors" id="mirrors-ok" value="OK">
+            <label class="toggle-btn" for="mirrors-ok">OK</label>
+            <input type="radio" class="fail-radio" name="mirrors" id="mirrors-fail" value="FAIL">
+            <label class="toggle-btn" for="mirrors-fail">FAIL</label>
+          </div>
+        </div>
+        <div class="checklist-row">
+          <span class="checklist-label">Seat belts</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="seatbelts" id="seatbelts-ok" value="OK">
+            <label class="toggle-btn" for="seatbelts-ok">OK</label>
+            <input type="radio" class="fail-radio" name="seatbelts" id="seatbelts-fail" value="FAIL">
+            <label class="toggle-btn" for="seatbelts-fail">FAIL</label>
+          </div>
+        </div>
+        <div class="checklist-row">
+          <span class="checklist-label">Horn</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="horn" id="horn-ok" value="OK">
+            <label class="toggle-btn" for="horn-ok">OK</label>
+            <input type="radio" class="fail-radio" name="horn" id="horn-fail" value="FAIL">
+            <label class="toggle-btn" for="horn-fail">FAIL</label>
+          </div>
+        </div>
+        <div class="checklist-row">
+          <span class="checklist-label">Engine oil &amp; coolant (no warning lights)</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="fluid" id="fluid-ok" value="OK">
+            <label class="toggle-btn" for="fluid-ok">OK</label>
+            <input type="radio" class="fail-radio" name="fluid" id="fluid-fail" value="FAIL">
+            <label class="toggle-btn" for="fluid-fail">FAIL</label>
+          </div>
+        </div>
+        <div class="checklist-row">
+          <span class="checklist-label">First aid kit present</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="firstaid" id="firstaid-ok" value="OK">
+            <label class="toggle-btn" for="firstaid-ok">OK</label>
+            <input type="radio" class="fail-radio" name="firstaid" id="firstaid-fail" value="FAIL">
+            <label class="toggle-btn" for="firstaid-fail">FAIL</label>
+          </div>
+        </div>
+        <div class="checklist-row">
+          <span class="checklist-label">Fire extinguisher (in date)</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="extinguisher" id="extinguisher-ok" value="OK">
+            <label class="toggle-btn" for="extinguisher-ok">OK</label>
+            <input type="radio" class="fail-radio" name="extinguisher" id="extinguisher-fail" value="FAIL">
+            <label class="toggle-btn" for="extinguisher-fail">FAIL</label>
+          </div>
+        </div></div>
   </div>
 
   <!-- VEHICLE CONDITION -->
@@ -513,7 +635,61 @@
   <div class="section">
     <div class="section-title">Pestea Equipment On Board</div>
     <p class="hint" style="margin-bottom:16px">Tick all items present and in working order.</p>
-    <div id="equipmentItems"></div>
+    <div id="equipmentItems">
+        <div class="checklist-row">
+          <span class="checklist-label">Sprayer / ULV fogger</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="sprayer" id="sprayer-ok" value="OK">
+            <label class="toggle-btn" for="sprayer-ok">OK</label>
+            <input type="radio" class="fail-radio" name="sprayer" id="sprayer-fail" value="FAIL">
+            <label class="toggle-btn" for="sprayer-fail">FAIL</label>
+          </div>
+        </div>
+        <div class="checklist-row">
+          <span class="checklist-label">Chemical stock &amp; COSHH sheets</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="chemicals" id="chemicals-ok" value="OK">
+            <label class="toggle-btn" for="chemicals-ok">OK</label>
+            <input type="radio" class="fail-radio" name="chemicals" id="chemicals-fail" value="FAIL">
+            <label class="toggle-btn" for="chemicals-fail">FAIL</label>
+          </div>
+        </div>
+        <div class="checklist-row">
+          <span class="checklist-label">PPE (gloves, mask, overalls)</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="ppe" id="ppe-ok" value="OK">
+            <label class="toggle-btn" for="ppe-ok">OK</label>
+            <input type="radio" class="fail-radio" name="ppe" id="ppe-fail" value="FAIL">
+            <label class="toggle-btn" for="ppe-fail">FAIL</label>
+          </div>
+        </div>
+        <div class="checklist-row">
+          <span class="checklist-label">Tool kit</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="toolkit" id="toolkit-ok" value="OK">
+            <label class="toggle-btn" for="toolkit-ok">OK</label>
+            <input type="radio" class="fail-radio" name="toolkit" id="toolkit-fail" value="FAIL">
+            <label class="toggle-btn" for="toolkit-fail">FAIL</label>
+          </div>
+        </div>
+        <div class="checklist-row">
+          <span class="checklist-label">Spill kit</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="spill" id="spill-ok" value="OK">
+            <label class="toggle-btn" for="spill-ok">OK</label>
+            <input type="radio" class="fail-radio" name="spill" id="spill-fail" value="FAIL">
+            <label class="toggle-btn" for="spill-fail">FAIL</label>
+          </div>
+        </div>
+        <div class="checklist-row">
+          <span class="checklist-label">Treatment signage &amp; stickers</span>
+          <div class="toggle-group">
+            <input type="radio" class="ok-radio" name="signage" id="signage-ok" value="OK">
+            <label class="toggle-btn" for="signage-ok">OK</label>
+            <input type="radio" class="fail-radio" name="signage" id="signage-fail" value="FAIL">
+            <label class="toggle-btn" for="signage-fail">FAIL</label>
+          </div>
+        </div></div>
   </div>
 
   <!-- DEFECTS & NOTES -->
@@ -551,7 +727,7 @@
           ✓ I confirm
         </label>
       </div>
-      <span class="error-msg" id="decl-error" style="display:none;color:var(--red);font-size:12px;display:block;margin-top:4px"></span>
+      <span class="error-msg" id="decl-error" style="margin-top:4px"></span>
     </div>
   </div>
 
@@ -561,33 +737,112 @@
 
 <script>
   // ─── CONFIG ────────────────────────────────────────────────────────────────
-  // Replace this URL with your Google Apps Script Web App URL after deployment
-  const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzyQMgVCFQmV-EktsAEAvtUf_c6mz8ewDpnpRSRrrD8Ybp9bdFeWPwW8fpx6DlWPjz/exec';
+
+  // Known fleet — registration: driver name
+  // Update this list when you add a vehicle to the master sheet
+  const FLEET = {
+    'S24575': 'Ralph Morgan',
+    'S44080': 'Nicolas Mussard',
+    'S29212': 'Vilma Vel',
+    'S38994': 'Manuel Louis-Marie',
+    'S47423': 'Alex Kisenga',
+    'S47208': 'Terence Padayachy',
+    'S47201': 'Peter Leba',
+    'S47207': 'Mark Briones',
+    'S47202': 'Bernie Cadungog',
+    'S43621': 'Glenn Aura',
+    'S30688': 'Andrew Valmont',
+    'S35490': 'Raphael Killindo',
+    'S37542': 'Geordley Dugasse'
+  };
+
+  let selectedReg = '';
+  let selectedDriver = '';
+  let isNewVehicle = false;
+
+  // ─── VEHICLE SELECTION ─────────────────────────────────────────────────────
+  function onVehicleSelect(val) {
+    const newPanel = document.getElementById('newVehiclePanel');
+    const driverField = document.getElementById('field-driver');
+
+    if (val === '__NEW__') {
+      newPanel.classList.add('visible');
+      driverField.style.display = 'none';
+      selectedReg = '';
+      selectedDriver = '';
+      isNewVehicle = true;
+    } else if (val && FLEET[val]) {
+      newPanel.classList.remove('visible');
+      isNewVehicle = false;
+      selectedReg = val;
+      selectedDriver = FLEET[val];
+      // Show driver confirm field pre-filled
+      driverField.style.display = 'block';
+      document.getElementById('driver').value = FLEET[val];
+    } else {
+      newPanel.classList.remove('visible');
+      driverField.style.display = 'none';
+      selectedReg = '';
+      selectedDriver = '';
+      isNewVehicle = false;
+    }
+  }
+
+  function confirmNewVehicle() {
+    const reg   = document.getElementById('newReg').value.trim().toUpperCase();
+    const name  = document.getElementById('newDriver').value.trim();
+    const model = document.getElementById('newModel').value.trim();
+
+    if (!reg || !name) {
+      alert('Enter at least the registration number and driver name.');
+      return;
+    }
+
+    selectedReg    = reg;
+    selectedDriver = name;
+    isNewVehicle   = true;
+
+    // Add to dropdown so it shows in the select
+    const sel = document.getElementById('vehicleSelect');
+    const opt = document.createElement('option');
+    opt.value = reg;
+    opt.textContent = `${reg} — ${name} (NEW)`;
+    // Insert before the "+ Add" option
+    sel.insertBefore(opt, sel.lastElementChild);
+    sel.value = reg;
+
+    document.getElementById('newVehiclePanel').classList.remove('visible');
+    const driverField = document.getElementById('field-driver');
+    driverField.style.display = 'block';
+    document.getElementById('driver').value = name;
+
+    alert(`✓ ${reg} added for this check. Remember to notify the office so it can be added to the master vehicle list.`);
+  }
 
   // ─── CHECKLIST ITEMS ───────────────────────────────────────────────────────
   const checklistItems = [
-    { id: 'tyres',      label: 'Tyres (pressure &amp; condition)' },
-    { id: 'lights',     label: 'Lights (front, rear, indicators)' },
-    { id: 'brakes',     label: 'Brakes (feel &amp; response)' },
-    { id: 'wipers',     label: 'Windscreen wipers' },
-    { id: 'mirrors',    label: 'Mirrors (adjusted &amp; intact)' },
-    { id: 'seatbelts',  label: 'Seat belts' },
-    { id: 'horn',       label: 'Horn' },
-    { id: 'fluid',      label: 'Engine oil &amp; coolant (no warning lights)' },
-    { id: 'firstaid',   label: 'First aid kit present' },
+    { id: 'tyres',        label: 'Tyres (pressure & condition)' },
+    { id: 'lights',       label: 'Lights (front, rear, indicators)' },
+    { id: 'brakes',       label: 'Brakes (feel & response)' },
+    { id: 'wipers',       label: 'Windscreen wipers' },
+    { id: 'mirrors',      label: 'Mirrors (adjusted & intact)' },
+    { id: 'seatbelts',    label: 'Seat belts' },
+    { id: 'horn',         label: 'Horn' },
+    { id: 'fluid',        label: 'Engine oil & coolant (no warning lights)' },
+    { id: 'firstaid',     label: 'First aid kit present' },
     { id: 'extinguisher', label: 'Fire extinguisher (in date)' },
   ];
 
   const equipmentItems = [
-    { id: 'sprayer',    label: 'Sprayer / ULV fogger' },
-    { id: 'chemicals',  label: 'Chemical stock &amp; COSHH sheets' },
-    { id: 'ppe',        label: 'PPE (gloves, mask, overalls)' },
-    { id: 'toolkit',    label: 'Tool kit' },
-    { id: 'spill',      label: 'Spill kit' },
-    { id: 'signage',    label: 'Treatment signage &amp; stickers' },
+    { id: 'sprayer',   label: 'Sprayer / ULV fogger' },
+    { id: 'chemicals', label: 'Chemical stock & COSHH sheets' },
+    { id: 'ppe',       label: 'PPE (gloves, mask, overalls)' },
+    { id: 'toolkit',   label: 'Tool kit' },
+    { id: 'spill',     label: 'Spill kit' },
+    { id: 'signage',   label: 'Treatment signage & stickers' },
   ];
 
-  // ─── BUILD CHECKLIST ───────────────────────────────────────────────────────
   function buildChecklist(items, containerId) {
     const container = document.getElementById(containerId);
     items.forEach(item => {
@@ -614,8 +869,6 @@
     const now = new Date();
     document.getElementById('checkDate').value = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
     document.getElementById('checkTime').value = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
-
-    // Week number
     const d = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
     const dayNum = d.getUTCDay() || 7;
     d.setUTCDate(d.getUTCDate() + 4 - dayNum);
@@ -626,7 +879,6 @@
 
   setDefaults();
 
-  // ─── FUEL LABEL ────────────────────────────────────────────────────────────
   function updateFuelLabel(val) {
     document.getElementById('fuelLabel').textContent = val + '%';
   }
@@ -651,17 +903,19 @@
   // ─── COLLECT DATA ──────────────────────────────────────────────────────────
   function collectData() {
     const data = {
-      timestamp: new Date().toISOString(),
-      driver: document.getElementById('driver').value.trim(),
-      registration: document.getElementById('reg').value.trim().toUpperCase(),
-      date: document.getElementById('checkDate').value,
-      time: document.getElementById('checkTime').value,
-      odometer: document.getElementById('odometer').value,
-      fuelLevel: document.getElementById('fuelLevel').value + '%',
-      bodywork: document.querySelector('input[name="bodywork"]:checked')?.value || '',
-      cleanliness: document.querySelector('input[name="clean"]:checked')?.value || '',
+      timestamp:       new Date().toISOString(),
+      driver:          document.getElementById('driver').value.trim(),
+      registration:    selectedReg,
+      isNewVehicle:    isNewVehicle ? 'YES — add to master list' : 'No',
+      newVehicleModel: isNewVehicle ? document.getElementById('newModel').value.trim() : '',
+      date:            document.getElementById('checkDate').value,
+      time:            document.getElementById('checkTime').value,
+      odometer:        document.getElementById('odometer').value,
+      fuelLevel:       document.getElementById('fuelLevel').value + '%',
+      bodywork:        document.querySelector('input[name="bodywork"]:checked')?.value || '',
+      cleanliness:     document.querySelector('input[name="clean"]:checked')?.value || '',
       immediateAction: document.querySelector('input[name="action"]:checked')?.value || '',
-      defects: document.getElementById('defects').value.trim(),
+      defects:         document.getElementById('defects').value.trim(),
     };
 
     checklistItems.forEach(item => {
@@ -677,10 +931,18 @@
 
   // ─── SUBMIT ────────────────────────────────────────────────────────────────
   async function submitForm() {
-    // Validate
     let valid = true;
+
+    // Vehicle selection
+    const vehicleField = document.getElementById('field-vehicle');
+    if (!selectedReg) {
+      vehicleField.classList.add('invalid');
+      valid = false;
+    } else {
+      vehicleField.classList.remove('invalid');
+    }
+
     valid = validateRequired('driver', 'driver') && valid;
-    valid = validateRequired('reg', 'reg') && valid;
     valid = validateRequired('date', 'checkDate') && valid;
     valid = validateRequired('time', 'checkTime') && valid;
     valid = validateRequired('odometer', 'odometer') && valid;
@@ -688,7 +950,7 @@
     valid = validateRadio('clean', 'cleanliness') && valid;
     valid = validateRadio('action', 'action') && valid;
 
-    const decl = document.getElementById('declaration');
+    const decl    = document.getElementById('declaration');
     const declErr = document.getElementById('decl-error');
     if (!decl.checked) {
       declErr.textContent = 'You must confirm the declaration before submitting.';
@@ -708,22 +970,21 @@
       return;
     }
 
-    const data = collectData();
+    const data    = collectData();
     const loading = document.getElementById('loading');
     loading.classList.add('active');
     document.getElementById('submitBtn').disabled = true;
 
     try {
       await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
+        method:  'POST',
+        mode:    'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body:    JSON.stringify(data)
       });
-      // no-cors means we can't read the response — assume success if no error thrown
       loading.classList.remove('active');
       document.getElementById('mainForm').style.display = 'none';
-      document.getElementById('success').style.display = 'block';
+      document.getElementById('success').style.display  = 'block';
       window.scrollTo(0, 0);
     } catch (err) {
       loading.classList.remove('active');
@@ -738,15 +999,22 @@
       if (el.type === 'radio' || el.type === 'checkbox') el.checked = false;
       else el.value = '';
     });
-    document.getElementById('fuelLevel').value = 50;
+    document.getElementById('vehicleSelect').value = '';
+    document.getElementById('newVehiclePanel').classList.remove('visible');
+    document.getElementById('field-driver').style.display = 'none';
+    document.getElementById('fuelLevel').value  = 50;
     document.getElementById('fuelLabel').textContent = '50%';
-    document.getElementById('defects').value = '';
+    document.getElementById('defects').value    = '';
     document.getElementById('submitBtn').disabled = false;
+    selectedReg    = '';
+    selectedDriver = '';
+    isNewVehicle   = false;
     setDefaults();
     document.getElementById('mainForm').style.display = 'block';
-    document.getElementById('success').style.display = 'none';
+    document.getElementById('success').style.display  = 'none';
     window.scrollTo(0, 0);
   }
 </script>
-</body>
-</html>
+
+
+</body></html>
